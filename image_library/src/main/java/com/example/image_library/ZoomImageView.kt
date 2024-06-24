@@ -6,10 +6,12 @@ import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
+import androidx.palette.graphics.Palette
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -71,16 +73,29 @@ class ZoomImageView @JvmOverloads constructor(
                 corners[3] = measuredHeight.toFloat() - corners[1]
                 corners[2] = measuredWidth.toFloat() - corners[0]
             }
+            setBackgroundDrawable()
             isInitialSizeSaved = true
         }
     }
 
-//    private fun setBackgroundDrawable() {
-//        val bitmap = (drawable as BitmapDrawable).bitmap
-//        val topHeight = bitmap.height * 0.1f
-//        val topBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, topHeight.toInt())
-//        val topPalette = Palette
-//    }
+    private fun setBackgroundDrawable() {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val topHeight = bitmap.height * 0.1f
+        val topBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, topHeight.toInt())
+        val topPalette = Palette.from(topBitmap).generate()
+        val topDominantColor = topPalette.getDominantColor(0x000000)
+        val bottomBitmap = Bitmap.createBitmap(bitmap, 0, bitmap.height - topHeight.toInt(), bitmap.width, topHeight.toInt())
+        val bottomPalette = Palette.from(bottomBitmap).generate()
+        val bottomDominantColor = bottomPalette.getDominantColor(0x000000)
+        val gradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                topDominantColor,
+                bottomDominantColor
+            )
+        )
+        setBackgroundDrawable(gradientDrawable)
+    }
 
     private fun calcShownImageSize() {
         matrix.getValues(matrixValue)
