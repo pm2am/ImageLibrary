@@ -254,9 +254,9 @@ class ZoomImageView @JvmOverloads constructor(
 
         const val NONE = 0
 
-        const val DRAG = 0
+        const val DRAG = 1
 
-        const val ZOOM = 0
+        const val ZOOM = 2
     }
 
 }
