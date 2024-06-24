@@ -208,7 +208,7 @@ class ZoomImageView @JvmOverloads constructor(
             0f, imgH.toFloat()
         )
         tmpMatrix.mapPoints(npoints)
-        return checkCorners(npoints)
+        return !checkCorners(npoints)
     }
 
     private fun checkCorners(points: FloatArray): Boolean {
