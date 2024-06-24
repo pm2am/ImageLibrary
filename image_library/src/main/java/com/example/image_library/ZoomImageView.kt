@@ -168,7 +168,7 @@ class ZoomImageView @JvmOverloads constructor(
                     return
                 }
                 tmpMatrix.postScale(scale, scale, mid.x, mid.y)
-                if (!checkForMinScale()) {
+                if (scale < 1f && !checkForMinScale()) {
                     return
                 }
                 matrix.set(tmpMatrix)
